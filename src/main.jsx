@@ -1,10 +1,37 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import React from "react"
+import ClaudeRecipe  from "./components/ClaudeRecipe";
+import IngredientsList from "./components/IngredientsList";
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+
+export default function Main() {
+
+    const [ingredients,setIngredients]=React.useState(["all main spices","pasta","chilli","tomato"]);
+    const [recipeShown,setRecipeShown]=React.useState(false);
+
+
+    function addIngredient(formData){
+      const newIngredient= formData.get("ingredient");
+      setIngredients(prevItems => [...prevItems,newIngredient])
+
+    }
+
+    function toggleRecipeShown(){
+      setRecipeShown(prev => !prev);
+    }
+    
+    return (
+        <main>
+            <form action={addIngredient} className="add-ingredient-form">
+                <input 
+                    type="text"
+                    placeholder="e.g. oregano"
+                    aria-label="Add ingredient"
+                    name="ingredient"
+                />
+                <button>Add ingredient</button>
+            </form>
+           {ingredients.length > 0 && <IngredientsList toggleRecipeShown={toggleRecipeShown} ingredients={ingredients} />}
+            {recipeShown && <ClaudeRecipe/>}
+        </main>
+    )
+}
